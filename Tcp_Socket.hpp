@@ -6,6 +6,7 @@
 #include<netinet/in.h>
 #include<sys/socket.h>
 
+#define CHECK_RET(q) if((q)==false){return -1;}
 #define LISTEN_BACKLOG 5
 using namespace std;
 
@@ -60,7 +61,7 @@ class Tcp_Socket{
         bool Accept(Tcp_Socket *sock,std::string *ip=NULL,uint16_t *port=NULL){
             sockaddr_in addr;
             socklen_t len=sizeof(sockaddr_in);
-            int newfd=accept(_sockfd,(sockaddr*)&addr,len);
+            int newfd=accept(_sockfd,(sockaddr*)&addr,&len);
             if(newfd<0){
                 perror("accept error: ");
                 return false;
@@ -99,7 +100,7 @@ class Tcp_Socket{
         }
         bool Close(){
             if(_sockfd!=-1)
-               close();
+               close(_sockfd);
             return true;
         }
 };
